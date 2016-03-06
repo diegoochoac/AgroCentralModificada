@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="600dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/relativeLayout4">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Latitud: "
+            android:textStyle="bold"
+            android:textSize="@dimen/textSizeGPS"
+            android:id="@+id/textView6"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="40dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.000000"
+            android:textSize="@dimen/textSizeGPS"
+            android:id="@+id/txtGPSLatitud"
+            android:layout_alignTop="@+id/textView6"
+            android:layout_toRightOf="@+id/textView6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSizeGPS"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Longitud: "
+            android:id="@+id/textView8"
+            android:layout_below="@+id/textView6"
+            android:paddingTop="15px"
+            android:layout_alignLeft="@+id/textView6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.000000"
+            android:id="@+id/txtGPSLongitud"
+            android:textSize="@dimen/textSizeGPS"
+            android:layout_above="@+id/textView34"
+            android:layout_toRightOf="@+id/textView8"
+            android:layout_toEndOf="@+id/textView8" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSizeGPS"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Velocidad: "
+            android:id="@+id/textView34"
+            android:layout_below="@+id/textView8"
+            android:layout_alignLeft="@+id/textView8"
+            android:paddingTop="15px"
+            android:layout_alignStart="@+id/textView8" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSizeGPS"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Altitud: "
+            android:id="@+id/textView36"
+            android:layout_below="@+id/textView34"
+            android:layout_alignLeft="@+id/textView34"
+            android:paddingTop="15px"
+            android:layout_alignStart="@+id/textView34" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.0"
+            android:textSize="@dimen/textSizeGPS"
+            android:id="@+id/txtGPSVelocidad"
+            android:layout_alignBottom="@+id/textView34"
+            android:layout_toRightOf="@+id/textView34"
+            android:layout_toEndOf="@+id/textView34" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0000.0"
+            android:textSize="@dimen/textSizeGPS"
+            android:id="@+id/txtGPSAltitud"
+            android:layout_above="@+id/textView31"
+            android:layout_toRightOf="@+id/textView36"
+            android:layout_toEndOf="@+id/textView36" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSizeGPS"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Presición: "
+            android:id="@+id/textView31"
+            android:layout_below="@+id/textView36"
+            android:layout_alignLeft="@+id/textView36"
+            android:paddingTop="15px"
+            android:layout_alignStart="@+id/textView36" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.0"
+            android:textSize="@dimen/textSizeGPS"
+            android:id="@+id/txtGPSPrecision"
+            android:layout_alignBottom="@+id/textView31"
+            android:layout_toRightOf="@+id/textView8"
+            android:layout_toEndOf="@+id/textView8" />
+
+        <TextView
+            android:layout_width="330dp"
+            android:layout_height="337dp"
+            android:text="GPS:"
+            android:id="@+id/txtGPSdisplay"
+            android:layout_gravity="right|center_vertical"
+            android:maxLines="30"
+            android:layout_below="@+id/textView31"
+            android:layout_alignLeft="@+id/textView31"
+            android:layout_alignStart="@+id/textView31"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#2F89B3"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/relativeLayout4"
+        android:id="@+id/layoutGPSExterno">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="GPS \nExterno/Interno"
+            android:gravity="center"
+            android:textSize="@dimen/textSizeGPS"
+            android:textColor="#FFF"
+            android:id="@+id/txtGPSExterno"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</RelativeLayout>
