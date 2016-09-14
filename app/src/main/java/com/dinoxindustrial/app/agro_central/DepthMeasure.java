@@ -145,10 +145,21 @@ public class DepthMeasure
         profundidad = L*(Math.sin(Math.toRadians(dif)) - Math.sin(Math.toRadians(angleCero)));
 
         double ang_inicial = Math.asin((double)L2/L);
-        double ang_medicion = Math.toRadians(dif - angleCero) + ang_inicial;
+
+        double ang_sistema = dif - angleCero;
+        if(ang_sistema < 0){
+            ang_sistema += 6;
+            if(ang_sistema>0)
+                ang_sistema = 0;
+        }
+
+        double ang_medicion = Math.toRadians(ang_sistema) + ang_inicial;
+
+
 
         profundidad = L*Math.sin(ang_medicion) - L2;
-        profundidad *= 1.33;
+        if(profundidad >= 0)
+            profundidad *= 1.33;
 
         double nProfundidad = profundidad - 0.3*(profundidad - lastProfundidad);
         lastProfundidad = profundidad;

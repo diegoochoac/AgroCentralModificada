@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+
+import java.util.Arrays;
+
 /**
  * Created by jjurado on 29/06/15.
  */
@@ -88,6 +92,18 @@ public class RegistrationParameters {
             System.out.println(ret[i]);
         }
         return ret;
+    }
+
+    public String getParametrosRegisterJSON()
+    {
+        String[] ret = {hacienda,lote,contratista,operador};
+        System.out.println("*****Parametros Registro ******");
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            System.out.println(ret[i]);
+        }
+        JSONArray arr = new JSONArray(Arrays.asList(ret));
+        return arr.toString();
     }
 
     public String[] getParametrosNodos()

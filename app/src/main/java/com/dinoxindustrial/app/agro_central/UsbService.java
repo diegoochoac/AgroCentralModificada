@@ -70,7 +70,7 @@ public class UsbService extends Service
         UsbService.SERVICE_CONNECTED = true;
         setFilter();
         usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        findSerialPortDevice();
+        //findSerialPortDevice(); //TODO descomentar
 
         contador = 0;
         message = "";

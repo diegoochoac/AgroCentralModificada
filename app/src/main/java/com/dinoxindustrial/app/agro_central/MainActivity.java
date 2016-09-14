@@ -1,50 +1,29 @@
 package com.dinoxindustrial.app.agro_central;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
-import java.util.Set;
-
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dinoxindustrial.app.agro_central.UsbService;
 import com.dinoxindustrial.app.agro_central.fragments.AgroCentralFragmentPagerAdapter;
 import com.dinoxindustrial.app.agro_central.fragments.GPSFragment;
 import com.dinoxindustrial.app.agro_central.fragments.NodosFragment;
@@ -53,9 +32,10 @@ import com.dinoxindustrial.app.agro_central.fragments.ParametrosFragment;
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosMaquinaFragment;
 import com.dinoxindustrial.app.agro_central.fragments.RegistroFragment;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
-import org.w3c.dom.Text;
+import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
+import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -633,7 +613,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
             if(usbService != null && enviar && !usbService.isSerialPortConnected())
             {
-                usbService.findSerialPortDevice();
+                //usbService.findSerialPortDevice();    //TODO descomentar
             }
             else if(usbService != null && enviar && usbService.isSerialPortConnected()) // if UsbService was correctly binded, Send data{
             {
@@ -665,11 +645,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }
                 char ini = 0x02;
                 char fin = 0x03;
-                usbService.write(("" + ini + command + fin).getBytes());
+                //usbService.write(("" + ini + command + fin).getBytes());
             }
             handler.postDelayed(updateData, delay);
         }
     };
+
+    public void sendSerial(String command){
+        if(usbService != null && enviar && usbService.isSerialPortConnected()) // if UsbService was correctly binded, Send data{
+        {
+            char ini = 0x02;
+            char fin = 0x03;
+            usbService.write(("" + ini + command + fin).getBytes());
+        }
+    }
 
     private Runnable guardarReporte = new Runnable(){
         public void run(){
@@ -901,6 +890,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 System.out.println(highScore);
                 */
                 parameters.getParametrosRegister();
+                //TODO
+                this.sendSerial("T0:START,"+parameters.getParametrosRegisterJSON());
                 break;
             case RegistroFragment.BTN_END_REGISTRO:
                 /*
@@ -910,6 +901,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 editor.commit();
                 */
                 registrando = false;
+                this.sendSerial("T0:END");
                 break;
             case RegistroFragment.BTN_PARAMETROS:
                 viewPager.setCurrentItem(0);
