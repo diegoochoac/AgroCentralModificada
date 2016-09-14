@@ -15,8 +15,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +27,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.dinoxindustrial.app.agro_central.fragments.AdministrarFragment;
 import com.dinoxindustrial.app.agro_central.fragments.AgroCentralFragmentPagerAdapter;
+import com.dinoxindustrial.app.agro_central.fragments.EventoFragment;
 import com.dinoxindustrial.app.agro_central.fragments.GPSFragment;
+import com.dinoxindustrial.app.agro_central.fragments.LaborFragment;
+import com.dinoxindustrial.app.agro_central.fragments.MenuFragment;
 import com.dinoxindustrial.app.agro_central.fragments.NodosFragment;
 import com.dinoxindustrial.app.agro_central.fragments.OnFragmentInteractionListener;
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosFragment;
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosMaquinaFragment;
 import com.dinoxindustrial.app.agro_central.fragments.RegistroFragment;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
@@ -50,14 +58,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private AgroCentralFragmentPagerAdapter pagerAdapter;
 
-    /**
-     * Labels UI
-     */
-
-    /**
-     * Buttons UI
-     */
-
     private boolean enviar;
     private boolean registrando;
     private boolean gpsTablet;
@@ -73,74 +73,50 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private RegistrationParameters parameters;
     private DepthMeasure medicionProfundidad;
 
-
-
     private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions | 8);
-
         setContentView(R.layout.agrocentral_layout);
 
-        /*
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        */
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        pagerAdapter = new AgroCentralFragmentPagerAdapter(getSupportFragmentManager(),
-                MainActivity.this);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(4);
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
+        inicializarMenu();
+        //inicializarLabor();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        medicionProfundidad = new DepthMeasure();
-
-
-        mHandler = new MyHandler(this);
-
-        gpsTablet = true;
+        //medicionProfundidad = new DepthMeasure();
+        //mHandler = new MyHandler(this);
+        //gpsTablet = true;
 
         stateRegistro = 0;
         stateComSerial = 0;
         stateNodos = 0;
 
-        enviar = false;
-        registrando = false;
+        //enviar = false;
+        //registrando = false;
 
-        updateData.run();
-        guardarReporte.run();
-        revisarUSB.run();
+        //updateData.run();
+        //guardarReporte.run();
+        //revisarUSB.run();
 
-        fop = new FileOperations(this);
-
-        reporte = new ReporteProfundidad();
-
+        //fop = new FileOperations(this);
+        //reporte = new ReporteProfundidad();
+        //loadPreferences();
+/*
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
 // Define a listener that responds to location updates
+        //<editor-fold desc="locationListener">
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
@@ -167,7 +143,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 // Register the listener with the Location Manager to receive location updates
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-        loadPreferences();
+
 
         boolean isPresent = fop.isSDPresent();
 
@@ -196,12 +172,49 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         {
             Toast.makeText(this, "No es escribible", Toast.LENGTH_SHORT).show();
         }
-
-        //Prueba transmision
-
-
+        //</editor-fold>
+*/
 
     }
+
+
+    public void inicializarMenu(){
+        Fragment fragment = null;
+        fragment = new MenuFragment();
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.fragmentMain, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
+    public void inicializarLabor(){
+
+        Fragment fragment = null;
+        fragment = new LaborFragment();
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.fragmentMain, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
+    public void inicializarEvento(){
+        Fragment fragment = null;
+        fragment = new EventoFragment();
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.fragmentMain, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
+    public void inicializarAdministrar(){
+        Fragment fragment = null;
+        fragment = new AdministrarFragment();
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.fragmentMain, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
 
     public void loadPreferences()
     {
@@ -283,32 +296,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
     public void showToast(String msj)
     {
         Toast.makeText(this,msj,Toast.LENGTH_SHORT);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -317,12 +307,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     {
         switch (v.getId())
         {
-            case R.id.btnClear:
-                //display.setText("");
-                break;
-            case R.id.btnEnviar:
-                enviar = !enviar;
-                break;
             case R.id.btnRegistro:
                 switch (stateRegistro)
                 {
@@ -905,6 +889,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case RegistroFragment.BTN_PARAMETROS:
                 viewPager.setCurrentItem(0);
+                break;
+
+            case MenuFragment.BTN_LABOR:
+                Log.i("MainActivity","onFragmentInteraction BTN_LABOR");
+                inicializarLabor();
+                break;
+
+            case MenuFragment.BTN_EVENTO:
+                Log.i("MainActivity","onFragmentInteraction BTN_EVENTO");
+                inicializarEvento();
+                break;
+
+            case MenuFragment.BTN_ADMINISTRAR:
+                Log.i("MainActivity","onFragmentInteraction BTN_ADMINISTRAR");
+                inicializarAdministrar();
                 break;
 
             default:
