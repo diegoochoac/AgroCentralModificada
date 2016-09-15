@@ -205,7 +205,7 @@ public class RegistroFragment extends Fragment implements View.OnClickListener{
                 mListener.onFragmentInteraction(uri);
                 break;
             case R.id.layoutParametros:
-                System.out.println("Btn SetCero clicked");
+                System.out.println("Btn Parametros clicked");
                 uri = Uri.parse(BTN_PARAMETROS+":");
                 mListener.onFragmentInteraction(uri);
                 break;

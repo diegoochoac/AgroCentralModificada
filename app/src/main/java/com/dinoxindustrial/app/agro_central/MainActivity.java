@@ -76,6 +76,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ViewPager viewPager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -88,29 +89,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         decorView.setSystemUiVisibility(uiOptions | 8);
         setContentView(R.layout.agrocentral_layout);
 
-
         inicializarMenu();
-        //inicializarLabor();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //medicionProfundidad = new DepthMeasure();
-        //mHandler = new MyHandler(this);
-        //gpsTablet = true;
 
-        stateRegistro = 0;
-        stateComSerial = 0;
-        stateNodos = 0;
-
-        //enviar = false;
-        //registrando = false;
-
-        //updateData.run();
-        //guardarReporte.run();
-        //revisarUSB.run();
-
-        //fop = new FileOperations(this);
-        //reporte = new ReporteProfundidad();
-        //loadPreferences();
 /*
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -195,6 +177,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         trans.replace(R.id.fragmentMain, fragment);
         trans.addToBackStack(null);
         trans.commit();
+        Log.i("MainActivity","Se coloca el fragment");
+
+        medicionProfundidad = new DepthMeasure();
+        mHandler = new MyHandler(this);
+        gpsTablet = true;
+
+        stateRegistro = 0;
+        stateComSerial = 0;
+        stateNodos = 0;
+
+        enviar = false;
+        registrando = false;
+
+        //updateData.run();
+        //guardarReporte.run();
+        //revisarUSB.run();
+
+        fop = new FileOperations(this);
+        reporte = new ReporteProfundidad();
+        loadPreferences();
+
+
+        String[] param = getRegistrationParameters().getParametrosRegister();
+        String[] paramMachine = getRegistrationParameters().getParametrosMachine();
+        String[] paramNodos = getRegistrationParameters().getParametrosNodos();
+        Bundle args = new Bundle();
+        args.putStringArray("parametro",param);
+        args.putStringArray("maquina",paramMachine);
+        args.putStringArray("nodo",paramNodos);
+        fragment.setArguments(args);
+        Log.i("MainActivity","Se envia info a el fragment");
     }
 
     public void inicializarEvento(){
@@ -282,6 +295,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onResume()
     {
+        Log.i("MainActivity","onResume");
         super.onResume();
         setFilters();  // Start listening notifications from UsbService
         startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
@@ -290,11 +304,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onPause()
     {
+        Log.i("MainActivity","onPause");
         super.onPause();
         unregisterReceiver(mUsbReceiver);
         unbindService(usbConnection);
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.i("MainActivity","onDestroy");
+        super.onDestroy();
+    }
 
     public void showToast(String msj)
     {
@@ -862,32 +882,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 gpsTablet = true;
                 break;
             case RegistroFragment.BTN_INIT_REGISTRO:
-                System.out.println(spl[0]);
+                Log.i("MainActivity","onFragmentInteraction BTN_INIT_REGISTRO");
                 registrando = true;
                 fop.empezarRegistro(reporte.getHacienda(), reporte.getLote());
                 fop.writeHeaders(reporte.darEncabezado());
-                //fop.writeAngles("Distance herramienta = " + medicionProfundidad.getDistanceHerramienta());
-                //fop.writeAngles("Distance suelo = " + medicionProfundidad.getDistanceGrownd());
-                /*
-                SharedPreferences sharedPrefs = this.getPreferences(Context.MODE_PRIVATE);
-                long highScore = sharedPrefs.getInt("Prueba", 0);
-                System.out.println(highScore);
-                */
                 parameters.getParametrosRegister();
                 //TODO
                 this.sendSerial("T0:START,"+parameters.getParametrosRegisterJSON());
                 break;
+
             case RegistroFragment.BTN_END_REGISTRO:
-                /*
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt("Prueba", 12);
-                editor.commit();
-                */
+                Log.i("MainActivity","onFragmentInteraction BTN_END_REGISTRO");
                 registrando = false;
                 this.sendSerial("T0:END");
                 break;
+
             case RegistroFragment.BTN_PARAMETROS:
+                Log.i("MainActivity","onFragmentInteraction BTN_PARAMETROS");
                 viewPager.setCurrentItem(0);
                 break;
 
