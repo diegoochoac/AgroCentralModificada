@@ -1,0 +1,179 @@
+#
+# generated on 2016/09/15 12:16:48
+#
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.evento.Evento
+tableName=evento
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=tipoEvento
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --field-start--
+fieldName=fecha
+# --field-end--
+# --field-start--
+fieldName=horaInicio
+# --field-end--
+# --field-start--
+fieldName=horaFin
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.evento.TipoEvento
+tableName=tipoevento
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=nombre
+columnName=nombre
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.contratista.Usuario
+tableName=usuario
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=nombre
+columnName=nombre
+# --field-end--
+# --field-start--
+fieldName=contratista
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista
+tableName=contratista
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=nombre
+columnName=nombre
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.terreno.Suerte
+tableName=suerte
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=nombre
+columnName=nombre
+# --field-end--
+# --field-start--
+fieldName=area
+columnName=area
+# --field-end--
+# --field-start--
+fieldName=variedad
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --field-start--
+fieldName=zona
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.terreno.Hacienda
+tableName=hacienda
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=codigo
+columnName=codigo
+# --field-end--
+# --field-start--
+fieldName=nombre
+columnName=nombre
+# --field-end--
+# --field-start--
+fieldName=suerte
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.terreno.Zona
+tableName=zona
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=valor
+columnName=valor
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.dinoxindustrial.app.agro_central.basedatos.terreno.Variedad
+tableName=variedad
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=valor
+columnName=valor
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

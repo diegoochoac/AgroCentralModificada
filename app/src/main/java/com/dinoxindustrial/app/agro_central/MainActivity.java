@@ -14,20 +14,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.dinoxindustrial.app.agro_central.fragments.AdministrarFragment;
+import com.dinoxindustrial.app.agro_central.fragments.administrar.AdministrarFragment;
 import com.dinoxindustrial.app.agro_central.fragments.AgroCentralFragmentPagerAdapter;
 import com.dinoxindustrial.app.agro_central.fragments.EventoFragment;
 import com.dinoxindustrial.app.agro_central.fragments.GPSFragment;
@@ -39,7 +36,6 @@ import com.dinoxindustrial.app.agro_central.fragments.ParametrosFragment;
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosMaquinaFragment;
 import com.dinoxindustrial.app.agro_central.fragments.RegistroFragment;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import android.support.v4.app.FragmentPagerAdapter;
 
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
@@ -75,6 +71,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private ViewPager viewPager;
 
+    private static final int PICKFILE_RESULT_CODE = 1;
+
 
 
     @Override
@@ -92,70 +90,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         inicializarMenu();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        inicializarGps();
 
-/*
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-// Define a listener that responds to location updates
-        //<editor-fold desc="locationListener">
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                //System.out.println(location.getAccuracy()+"  -  "+location.getLatitude()+"  -  "+location.getLongitude()+" - "+location.getAltitude());
-                //display.append(location.getAccuracy() + "-" + location.getLatitude() + "-" + location.getLongitude() + "-" + location.getSpeed() + "\n");
-
-
-                double speed = location.getSpeed()*3.6;
-
-
-
-                if(gpsTablet)
-                    updateGPS(location.getLatitude(), location.getLongitude(), speed, location.getAccuracy(), location.getAltitude());
-
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-// Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-
-
-        boolean isPresent = fop.isSDPresent();
-
-        if(isPresent)
-        {
-            Toast.makeText(this, "Si sd", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, "No sd", Toast.LENGTH_SHORT).show();
-        }
-
-        boolean isWritable = fop.isExternalStorageWritable();
-        if(isWritable)
-        {
-            Toast.makeText(this, "Si es escribible", Toast.LENGTH_SHORT).show();
-            try {
-                Toast.makeText(this, fop.getAlbumStorageDir("Prueba"), Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "No es escribible", Toast.LENGTH_SHORT).show();
-        }
-        //</editor-fold>
-*/
 
     }
 
@@ -208,6 +144,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         args.putStringArray("nodo",paramNodos);
         fragment.setArguments(args);
         Log.i("MainActivity","Se envia info a el fragment");
+
+        memoriaSd();
     }
 
     public void inicializarEvento(){
@@ -228,6 +166,58 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         trans.commit();
     }
 
+    public void inicializarGps(){
+
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                //System.out.println(location.getAccuracy()+"  -  "+location.getLatitude()+"  -  "+location.getLongitude()+" - "+location.getAltitude());
+                //display.append(location.getAccuracy() + "-" + location.getLatitude() + "-" + location.getLongitude() + "-" + location.getSpeed() + "\n");
+
+                double speed = location.getSpeed()*3.6;
+
+                if(gpsTablet)
+                    updateGPS(location.getLatitude(), location.getLongitude(), speed, location.getAccuracy(), location.getAltitude());
+
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+    }
+
+    public void memoriaSd(){
+
+        boolean isPresent = fop.isSDPresent();
+
+        if(isPresent){
+            Toast.makeText(this, "Si sd", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "No sd", Toast.LENGTH_SHORT).show();
+        }
+
+        boolean isWritable = fop.isExternalStorageWritable();
+        if(isWritable){
+            Toast.makeText(this, "Si es escribible", Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(this, fop.getAlbumStorageDir("Prueba"), Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "No es escribible", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void loadPreferences()
     {
@@ -713,7 +703,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         pagerAdapter.updateEstado(reporte.getEstado());
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        Log.i("CrearTerreno", "onActivityResult resultCode:"+ resultCode + "requestCode:"+ requestCode);
+        switch (requestCode) {
+            case PICKFILE_RESULT_CODE:
+                if (resultCode == RESULT_OK) {
+                    String FilePath = data.getData().getPath();
+                    //FilePath is your file as a string
+                    Log.i("CrearTerreno", "onActivityResult FilePath: "+FilePath);
+                    //readExcelFile(thiscontext,FilePath);
+                }
+        }
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -916,6 +920,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Log.i("MainActivity","onFragmentInteraction BTN_ADMINISTRAR");
                 inicializarAdministrar();
                 break;
+
+
 
             default:
                 System.out.println("Another command: "+spl[0]);

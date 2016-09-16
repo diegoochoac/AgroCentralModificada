@@ -1,58 +1,76 @@
 package com.dinoxindustrial.app.agro_central.fragments;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dinoxindustrial.app.agro_central.MainActivity;
 import com.dinoxindustrial.app.agro_central.R;
+import com.dinoxindustrial.app.agro_central.basedatos.DatabaseCrud;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Usuario;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Hacienda;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Suerte;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ParametrosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ParametrosFragment extends Fragment implements TextWatcher,View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    //BASE DE DATOS
+    private DatabaseCrud database;
+    private List<Usuario> usuarioList;
+    private List<String> usuarioListName = new ArrayList<>();
+    private List<Contratista> contratistaList;
+    private List<String> contratistaListName = new ArrayList<>();
+    private List<Hacienda> terrenoListHacienda;
+    private List<String> terrenoListHaciendaName = new ArrayList<>();
+    private List<Suerte> terrenoListSuerte;
+    private List<String> terrenoListSuerteName = new ArrayList<>();
+
+    private ArrayAdapter<String> adapterUsuario;
+    private ArrayAdapter<String> adapterContratista;
+    private ArrayAdapter<String> adapterTerreno;
+
+    //Variables que se van hacia el MAINACTIVITY
     public final static String SET_HACIENDA = "Distacia hacienda";
     public final static String SET_LOTE = "Distacia lote";
     public final static String SET_CONTRATISTA = "Distacia contratista";
     public final static String SET_OPERADOR = "Distacia opeador";
     public final static String SET_PROFUNDIDAD_DESEADA = "Profundidad deseada";
     public final static String SET_EQ_AGRICOLA = "Profundidad eq Agricola";
-
     public static final String BTN_REGISTRO = "regiistro";
     public static final String BTN_PARAMETROS_MAQUINA = "PArametros maquibna";
 
-
+    //Variables que se traen de el MAINACTIVITY
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     public final static String ARG_HACIENDA = "Arg hacienda";
     public final static String ARG_LOTE = "Arg lote";
     public final static String ARG_CONTRATISTA = "Arg contratista";
     public final static String ARG_OPERADOR = "Arg opeador";
 
-    // TODO: Rename and change types of parameters
+    //Variables locales
     private String mParam1;
     private String mParam2;
     private String hacienda;
@@ -68,17 +86,10 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
     private RelativeLayout btnParametrosRegistro;
     private RelativeLayout btnParametrosMaquina;
 
+    private int stateClick = -1;
     private OnFragmentInteractionListener mListener;
+    Context thiscontext;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ParametrosFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ParametrosFragment newInstance(String mHacienda, String mLote,String mContratista,String mOperador) {
         ParametrosFragment fragment = new ParametrosFragment();
         Bundle args = new Bundle();
@@ -109,11 +120,16 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_parametros_2, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_parametros_2, container, false);
+        database = new DatabaseCrud(container.getContext());
+        inicializarComponentes(rootview);
+        thiscontext = container.getContext();
+        return rootview;
+    }
 
+    private void inicializarComponentes(final View view) {
         txtHacienda = (TextView)view.findViewById(R.id.txtParametrosHacienda);
         txtLote = (TextView)view.findViewById(R.id.txtParametrosLote);
         txtContratista = (TextView)view.findViewById(R.id.txtParametrosContratista);
@@ -124,10 +140,10 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
         txtContratista.setText(contratista);
         txtOperador.setText(operador);
 
-        txtHacienda.addTextChangedListener(this);
-        txtLote.addTextChangedListener(this);
-        txtContratista.addTextChangedListener(this);
-        txtOperador.addTextChangedListener(this);
+        txtHacienda.setOnClickListener(this);
+        txtLote.setOnClickListener(this);
+        txtContratista.setOnClickListener(this);
+        txtOperador.setOnClickListener(this);
 
         btnParametrosRegistro = (RelativeLayout)view.findViewById(R.id.layoutRegistro);
         btnParametrosRegistro.setOnClickListener(this);
@@ -203,10 +219,227 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                     }
                 });
 
-        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    void AlerDialogListUsuario(){
+        final AlertDialog.Builder alertdialogbuilder = new AlertDialog.Builder(thiscontext);
+
+        LinearLayout layout= new LinearLayout(thiscontext);
+        final TextView Message = new TextView(thiscontext);
+        final EditText editText = new EditText(thiscontext);
+        final ListView listview = new ListView(thiscontext);
+
+        Message.setText("Ingrese busqueda:");
+        editText.setSingleLine();
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(Message);
+        layout.addView(editText);
+        layout.addView(listview);
+        alertdialogbuilder.setTitle("Por favor seleccione");
+        alertdialogbuilder.setView(layout);
+
+        listview.setAdapter(adapterUsuario);
+        final AlertDialog alert = alertdialogbuilder.create();
+
+        editText.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s){
+
+            }
+            public void beforeTextChanged(CharSequence s,int start, int count, int after){
+
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                String text = editText.getText().toString().toLowerCase().trim();
+                usuarioList = database.obtenerUsuarioAutocompletar(Usuario.NOMBRE,text);
+                Log.i("ParametrosFragment", "AlerDialogListUsuario numero:"+usuarioList.size());
+                if(usuarioList.size()>0 && usuarioList != null){
+                    for(int i=0; i<usuarioList.size(); i++){
+                        usuarioListName.add(usuarioList.get(i).getNombre());
+                    }
+                    adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
+                    listview.setAdapter(adapterUsuario);
+                }
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                Object select= null;
+                select= adapterUsuario.getItem(position);
+                txtOperador.setText(select.toString());
+                Uri uri = Uri.parse(SET_OPERADOR +":"+ select.toString());
+                mListener.onFragmentInteraction(uri);
+                alert.cancel();
+            }
+        });
+
+        alertdialogbuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
+    void AlerDialogListContratista(){
+        final AlertDialog.Builder alertdialogbuilder = new AlertDialog.Builder(thiscontext);
+
+        LinearLayout layout= new LinearLayout(thiscontext);
+        final TextView Message = new TextView(thiscontext);
+        final EditText editText = new EditText(thiscontext);
+        final ListView listview = new ListView(thiscontext);
+
+        Message.setText("Ingrese busqueda:");
+        editText.setSingleLine();
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(Message);
+        layout.addView(editText);
+        layout.addView(listview);
+        alertdialogbuilder.setTitle("Por favor seleccione");
+        alertdialogbuilder.setView(layout);
+
+        listview.setAdapter(adapterContratista);
+        final AlertDialog alert = alertdialogbuilder.create();
+
+        editText.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s){
+
+            }
+            public void beforeTextChanged(CharSequence s,int start, int count, int after){
+
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                String text = editText.getText().toString().toLowerCase().trim();
+                contratistaList = database.obtenerContratistaAutocompletar(Contratista.NOMBRE,text);
+                Log.i("ParametrosFragment", "AlerDialogListUsuario numero:"+usuarioList.size());
+                if(contratistaList.size()>0 && contratistaList != null){
+                    for(int i=0; i<contratistaList.size(); i++){
+                        contratistaListName.add(contratistaList.get(i).getNombre());
+                    }
+                    adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                    listview.setAdapter(adapterContratista);
+                }
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                Object select= null;
+                select= adapterContratista.getItem(position);
+                txtContratista.setText(select.toString());
+                Uri uri = Uri.parse(SET_CONTRATISTA +":"+ select.toString());
+                mListener.onFragmentInteraction(uri);
+                alert.cancel();
+            }
+        });
+
+        alertdialogbuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
+    void AlerDialogListTerreno(){
+        final AlertDialog.Builder alertdialogbuilder = new AlertDialog.Builder(thiscontext);
+
+        LinearLayout layout= new LinearLayout(thiscontext);
+        final TextView Message = new TextView(thiscontext);
+        final EditText editText = new EditText(thiscontext);
+        final ListView listview = new ListView(thiscontext);
+
+        Message.setText("Ingrese busqueda:");
+        editText.setSingleLine();
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(Message);
+        layout.addView(editText);
+        layout.addView(listview);
+        alertdialogbuilder.setTitle("Por favor seleccione");
+        alertdialogbuilder.setView(layout);
+
+        listview.setAdapter(adapterTerreno);
+        Log.i("ParametrosFragment", "AlerDialogListTerreno numero:"+ adapterTerreno.getCount());
+        final AlertDialog alert = alertdialogbuilder.create();
+
+        editText.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s){
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                Log.i("ParametrosFragment", "onTextChanged");
+                String text = editText.getText().toString().toLowerCase().trim();
+                switch (stateClick){
+                     case 1:
+                         terrenoListHacienda = database.obtenerHaciendasAutocompletar(Hacienda.NOMBRE,text);
+                         if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
+                             for(int i=0; i<terrenoListHacienda.size(); i++){
+                                 terrenoListHaciendaName.add(terrenoListHacienda.get(i).getNombre());
+                             }
+                            adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListHaciendaName);
+                            listview.setAdapter(adapterTerreno);
+                         }
+                         break;
+                     case 2:
+                         terrenoListSuerte = database.obtenerSuertesAutocompletar(Suerte.NOMBRE,text);//TODO arreglar
+                         if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
+                             for(int i=0; i<terrenoListSuerte.size(); i++){
+                                 terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
+                             }
+                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
+                             listview.setAdapter(adapterTerreno);
+                         }
+                         break;
+                }
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                Object select= null;
+                Uri uri = Uri.parse("");
+                switch (stateClick){//TODO arreglar
+                    case 1:
+                        select= adapterTerreno.getItem(position);
+                        txtHacienda.setText(select.toString());
+                        uri = Uri.parse(SET_HACIENDA +":"+ select.toString());
+                        mListener.onFragmentInteraction(uri);
+                        break;
+                    case 2:
+                        select= adapterTerreno.getItem(position);
+                        txtLote.setText(select.toString());
+                        uri = Uri.parse(SET_LOTE +":"+ select.toString() );
+                        mListener.onFragmentInteraction(uri);
+                        break;
+                }
+                alert.cancel();
+            }
+        });
+
+        alertdialogbuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -286,6 +519,58 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                 uri = Uri.parse(BTN_PARAMETROS_MAQUINA+":");
                 mListener.onFragmentInteraction(uri);
                 break;
+
+            case R.id.txtParametrosHacienda:
+                terrenoListHacienda = database.obtenerHaciendas();
+                if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
+                    Log.i("ParametrosFragment", "onClick cmpTextHacienda");
+                    for(int i=0; i<terrenoListHacienda.size(); i++){
+                        terrenoListHaciendaName.add(terrenoListHacienda.get(i).getNombre());
+                    }
+                    adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListHaciendaName);
+                    AlerDialogListTerreno();
+                }
+                stateClick = 1;
+                break;
+
+            case R.id.txtParametrosLote:
+                terrenoListSuerte = database.obtenerSuertes();//TODO: Arreglar
+                if(terrenoListSuerte.size()>0 && terrenoListSuerte != null){
+                    Log.i("ParametrosFragment", "onClick cmpTextSuerte");
+                    for(int i=0; i<terrenoListSuerte.size(); i++){
+                        terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
+                    }
+                    adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
+                    AlerDialogListTerreno();
+                }
+                stateClick = 2;
+                break;
+
+            case R.id.txtParametrosContratista:
+                contratistaList = database.obtenerContratistas();
+                if(contratistaList.size()>0 && contratistaList != null){
+                    Log.i("ParametrosFragment", "onClick cmpTextOperador");
+                    for(int i=0; i<contratistaList.size(); i++){
+                        contratistaListName.add(contratistaList.get(i).getNombre());
+                    }
+                    adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                    AlerDialogListContratista();
+                }
+                break;
+
+            case R.id.txtParametrosOperador:
+                usuarioList = database.obtenerUsuarios();
+                if(usuarioList.size()>0 && usuarioList != null){
+                    Log.i("ParametrosFragment", "onClick cmpTextOperador");
+                    for(int i=0; i<usuarioList.size(); i++){
+                        usuarioListName.add(usuarioList.get(i).getNombre());
+                    }
+                    adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
+                    AlerDialogListUsuario();
+                }
+                break;
+
+
         }
     }
 }

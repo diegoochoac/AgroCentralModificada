@@ -1,4 +1,4 @@
-package com.dinoxindustrial.app.agro_central.fragments;
+package com.dinoxindustrial.app.agro_central.fragments.administrar;
 
 import android.content.Context;
 import android.os.Bundle;

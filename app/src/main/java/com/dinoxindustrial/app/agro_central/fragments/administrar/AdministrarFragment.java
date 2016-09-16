@@ -1,4 +1,4 @@
-package com.dinoxindustrial.app.agro_central.fragments;
+package com.dinoxindustrial.app.agro_central.fragments.administrar;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.dinoxindustrial.app.agro_central.R;
+import com.dinoxindustrial.app.agro_central.fragments.OnFragmentInteractionListener;
 
 /**
  * Created by diego on 14/09/16.

@@ -28,6 +28,10 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.0.+'
+    compile files('libs/ormlite-core-5.0.jar')
+    compile files('libs/ormlite-android-5.0.jar')
+    compile files('libs/gson-1.7.jar')
+    compile files('libs/poi-3.7.jar')
 }
 
 dependencies {

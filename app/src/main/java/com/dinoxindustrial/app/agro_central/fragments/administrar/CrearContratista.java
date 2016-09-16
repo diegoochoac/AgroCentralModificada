@@ -1,4 +1,4 @@
-package com.dinoxindustrial.app.agro_central.fragments;
+package com.dinoxindustrial.app.agro_central.fragments.administrar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dinoxindustrial.app.agro_central.R;
+import com.dinoxindustrial.app.agro_central.basedatos.DatabaseCrud;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista;
 
 
 /**
@@ -19,7 +21,7 @@ import com.dinoxindustrial.app.agro_central.R;
 public class CrearContratista extends Fragment implements OnClickListener {
 
     //Base de Datos
-    //private DatabaseCrud database;
+    private DatabaseCrud database;
 
     private EditText nombre;
     private Button Btnagregar;
@@ -30,7 +32,7 @@ public class CrearContratista extends Fragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_crearcontratista, container, false);
-        //database = new DatabaseCrud(container.getContext());
+        database = new DatabaseCrud(container.getContext());
         inicializarComponentes(rootview);
         return rootview;
     }
@@ -44,8 +46,8 @@ public class CrearContratista extends Fragment implements OnClickListener {
 
 
     public void agregarContratista(String nombre){
-        //Contratista contratista = new Contratista(nombre);
-        //database.crearContratista(contratista);
+        Contratista contratista = new Contratista(nombre);
+        database.crearContratista(contratista);
     }
 
     public void limpiarCampos(){
