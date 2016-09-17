@@ -1,5 +1,6 @@
 package com.dinoxindustrial.app.agro_central;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -24,7 +26,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.dinoxindustrial.app.agro_central.fragments.administrar.AdministrarFragment;
 import com.dinoxindustrial.app.agro_central.fragments.AgroCentralFragmentPagerAdapter;
 import com.dinoxindustrial.app.agro_central.fragments.EventoFragment;
 import com.dinoxindustrial.app.agro_central.fragments.GPSFragment;
@@ -35,10 +36,29 @@ import com.dinoxindustrial.app.agro_central.fragments.OnFragmentInteractionListe
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosFragment;
 import com.dinoxindustrial.app.agro_central.fragments.ParametrosMaquinaFragment;
 import com.dinoxindustrial.app.agro_central.fragments.RegistroFragment;
+import com.dinoxindustrial.app.agro_central.fragments.administrar.AdministrarFragment;
+import com.dinoxindustrial.app.agro_central.fragments.administrar.CrearTerreno;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
@@ -703,6 +723,121 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         pagerAdapter.updateEstado(reporte.getEstado());
     }
 
+
+    //<editor-fold desc="Leer archivos excel">
+    //Leer archivos excel para cargar contratista, terrenos, usuarios
+    private static void readExcelFile(Context context, String filename) {
+
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+        {
+            Log.i("Fallo","Storage not available or read only");
+            return;
+        }
+
+        try{
+            Log.i("Bien","readExcelFile");
+            // Creating Input Stream
+            //File file = new File(context.getExternalFilesDir(null), filename);
+            File file = new File(Environment.getExternalStorageDirectory()+"/"+filename);
+            FileInputStream myInput = new FileInputStream(file);
+            String extension = filename.substring(filename.lastIndexOf(".")+1).trim();
+            Log.i("Bien","extension:"+ extension);
+
+            if(extension.equals("xls") || extension.equals("ods")){
+                Log.i("Bien","readExcelFile xls");
+                // Create a POIFSFileSystem object
+                POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
+                // Create a workbook using the File System
+                HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
+                // Get the first sheet from workbook
+                HSSFSheet mySheet = myWorkBook.getSheetAt(0);
+                /** We now need something to iterate through the cells.**/
+                Iterator rowIter = mySheet.rowIterator();
+
+                while(rowIter.hasNext()) {
+                    HSSFRow myRow = (HSSFRow) rowIter.next();
+                    Iterator cellIter = myRow.cellIterator();
+                    while (cellIter.hasNext()) {
+                        HSSFCell myCell = (HSSFCell) cellIter.next();
+                        Log.i("Cell Value: ", "" + myCell.toString());
+                        Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }else if(extension.equals("xlsx")){
+                Log.i("Bien","readExcelFile xlsx");
+                XSSFWorkbook workbook = new XSSFWorkbook(myInput);      //TODO: el problema puede estar aca
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                int rowsCount = sheet.getPhysicalNumberOfRows();
+                FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+                for (int r = 0; r<rowsCount; r++) {
+                    Row row = sheet.getRow(r);
+                    int cellsCount = row.getPhysicalNumberOfCells();
+                    for (int c = 0; c<cellsCount; c++) {
+                        String value = getCellAsString(row, c, formulaEvaluator);
+                        String cellInfo = "r:"+r+"; c:"+c+"; v:"+value;
+                        Log.i("Cell Value: ", "Cell info:" + cellInfo.toString()+" value:" + value.toString());
+                        //printlnToUser(cellInfo);
+                    }
+                }
+
+            }
+
+        }catch (Exception e){e.printStackTrace();Log.i("Fallo","readExcelFile"); }
+
+        return;
+    }
+
+    protected static String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
+        String value = "";
+        try {
+            Cell cell = row.getCell(c);
+            CellValue cellValue = formulaEvaluator.evaluate(cell);
+            switch (cellValue.getCellType()) {
+                case Cell.CELL_TYPE_BOOLEAN:
+                    value = ""+cellValue.getBooleanValue();
+                    break;
+                case Cell.CELL_TYPE_NUMERIC:
+                    double numericValue = cellValue.getNumberValue();
+                    if(HSSFDateUtil.isCellDateFormatted(cell)) {
+                        double date = cellValue.getNumberValue();
+                        SimpleDateFormat formatter =
+                                new SimpleDateFormat("dd/MM/yy");
+                        value = formatter.format(HSSFDateUtil.getJavaDate(date));
+                    } else {
+                        value = ""+numericValue;
+                    }
+                    break;
+                case Cell.CELL_TYPE_STRING:
+                    value = ""+cellValue.getStringValue();
+                    break;
+                default:
+            }
+        } catch (NullPointerException e) {
+            /* proper error handling should be here */
+            //printlnToUser(e.toString());
+        }
+        return value;
+    }
+
+
+
+    public static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+    //</editor-fold>
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
@@ -712,9 +847,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case PICKFILE_RESULT_CODE:
                 if (resultCode == RESULT_OK) {
                     String FilePath = data.getData().getPath();
+                    String FileWind = FilePath.substring(FilePath.lastIndexOf(":")+1);
+                    String NameFile = FilePath.substring(FilePath.lastIndexOf("/")+1);
                     //FilePath is your file as a string
-                    Log.i("CrearTerreno", "onActivityResult FilePath: "+FilePath);
-                    //readExcelFile(thiscontext,FilePath);
+                    Log.i("CrearTerreno", "onActivityResult FilePath: "+FilePath+ " NameFile: "+ FileWind);
+                    readExcelFile(this.getApplicationContext(),FileWind);
+
+
                 }
         }
     }
@@ -921,7 +1060,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 inicializarAdministrar();
                 break;
 
-
+            case CrearTerreno.BTN_CREARTERRENOARCHIVO:
+                Log.i("CrearTerreno", "btnCargarArchivo"); //TODO no funciona aun la seleccion del archivo
+                Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
+                fileintent.setType("*/*");
+                try {
+                    startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
+                } catch (ActivityNotFoundException e) {        }
+                break;
 
             default:
                 System.out.println("Another command: "+spl[0]);

@@ -1,12 +1,9 @@
 package com.dinoxindustrial.app.agro_central.fragments.administrar;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,16 +20,7 @@ import com.dinoxindustrial.app.agro_central.basedatos.terreno.Hacienda;
 import com.dinoxindustrial.app.agro_central.basedatos.terreno.Suerte;
 import com.dinoxindustrial.app.agro_central.basedatos.terreno.Variedad;
 import com.dinoxindustrial.app.agro_central.basedatos.terreno.Zona;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Iterator;
+import com.dinoxindustrial.app.agro_central.fragments.OnFragmentInteractionListener;
 
 
 public class CrearTerreno extends Fragment implements OnClickListener {
@@ -44,7 +32,10 @@ public class CrearTerreno extends Fragment implements OnClickListener {
     private EditText codigo, hacienda, suerte, variedad, zona, area;
     private Button Btnagregar,BtnCargar;
 
-    private static final int PICKFILE_RESULT_CODE = 1;
+    public static final String BTN_CREARTERRENOARCHIVO = "crearTerreArchivo";
+
+
+    private OnFragmentInteractionListener mListener;
 
     Context thiscontext;
 
@@ -76,60 +67,7 @@ public class CrearTerreno extends Fragment implements OnClickListener {
         BtnCargar.setOnClickListener(this);
     }
 
-    private static void readExcelFile(Context context, String filename) {
 
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
-        {
-            //Log.e(TAG, "Storage not available or read only");
-            return;
-        }
-
-        try{
-            // Creating Input Stream
-            File file = new File(context.getExternalFilesDir(null), filename);
-            FileInputStream myInput = new FileInputStream(file);
-
-            // Create a POIFSFileSystem object
-            POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
-
-            // Create a workbook using the File System
-            HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
-
-            // Get the first sheet from workbook
-            HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-
-            /** We now need something to iterate through the cells.**/
-            Iterator rowIter = mySheet.rowIterator();
-
-            while(rowIter.hasNext()){
-                HSSFRow myRow = (HSSFRow) rowIter.next();
-                Iterator cellIter = myRow.cellIterator();
-                while(cellIter.hasNext()){
-                    HSSFCell myCell = (HSSFCell) cellIter.next();
-                    //Log.d(TAG, "Cell Value: " +  myCell.toString());
-                    Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }catch (Exception e){e.printStackTrace(); }
-
-        return;
-    }
-
-    public static boolean isExternalStorageAvailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isExternalStorageReadOnly() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
 
     public void agregarHacienda(String codigo, String hacienda, Suerte suerte){
 
@@ -168,13 +106,29 @@ public class CrearTerreno extends Fragment implements OnClickListener {
         zona.getText().clear();
         area.getText().clear();
     }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
 
 
     @Override
     public void onClick(View view) {
         Log.i("CrearTerreno", "onClick");
+        Uri uri = Uri.parse("");
         switch (view.getId()) {
             case R.id.btnAgregarTerreno:
                 if(codigo.getText().toString().length()>0 && hacienda.getText().toString().length()>0
@@ -196,13 +150,8 @@ public class CrearTerreno extends Fragment implements OnClickListener {
                 }
                 break;
             case R.id.btnCargarArchivo:
-                Log.i("CrearTerreno", "btnCargarArchivo"); //TODO no funciona aun la seleccion del archivo
-                Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
-                fileintent.setType("**/*//*");
-                try {
-                    startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
-                } catch (ActivityNotFoundException e) {        }
-
+                uri = Uri.parse(BTN_CREARTERRENOARCHIVO+":");
+                mListener.onFragmentInteraction(uri);
                 break;
 
         }

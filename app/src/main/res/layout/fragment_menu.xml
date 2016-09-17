@@ -19,8 +19,8 @@
             android:id="@+id/LinearLabor">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="250dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/imageView3"
                 android:src="@drawable/ic_exit_to_app_black_48dp"
                 android:layout_gravity="center" />
@@ -41,8 +41,7 @@
             android:layout_height="10dp"
             android:background="@drawable/border"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginRight="15dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -58,12 +57,12 @@
                 android:id="@+id/LinearEvento">
 
                 <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/imageView2"
                     android:src="@drawable/ic_date_range_black_48dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="40dp" />
+                    android:layout_marginTop="0dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,11 +82,10 @@
                 android:id="@+id/LinearAdministrar">
 
                 <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/imageView4"
                     android:src="@drawable/ic_next_week_black_48dp"
-                    android:layout_marginTop="40dp"
                     android:layout_gravity="center" />
 
                 <TextView
