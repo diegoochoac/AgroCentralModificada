@@ -30,7 +30,7 @@ public class CrearTerreno extends Fragment implements OnClickListener {
 
 
     private EditText codigo, hacienda, suerte, variedad, zona, area;
-    private Button Btnagregar,BtnCargar;
+    private Button Btnagregar,BtnCargar, BtnMenu;
 
     public static final String BTN_CREARTERRENOARCHIVO = "crearTerreArchivo";
 
@@ -65,6 +65,9 @@ public class CrearTerreno extends Fragment implements OnClickListener {
 
         BtnCargar= (Button)view.findViewById(R.id.btnCargarArchivo);
         BtnCargar.setOnClickListener(this);
+
+        BtnMenu = (Button)view.findViewById(R.id.btnMenu);
+        BtnMenu.setOnClickListener(this);
     }
 
 
@@ -152,6 +155,11 @@ public class CrearTerreno extends Fragment implements OnClickListener {
             case R.id.btnCargarArchivo:
                 uri = Uri.parse(BTN_CREARTERRENOARCHIVO+":");
                 mListener.onFragmentInteraction(uri);
+                break;
+
+            case R.id.btnMenu:
+                Log.i("CrearTerreno", "onClick regresar Menu");
+                getActivity().onBackPressed();
                 break;
 
         }

@@ -1,119 +1,126 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.administrar.CrearTerreno">
 
 
-    <ScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView2" >
+        android:layout_above="@+id/tableRow"
+        android:layout_marginBottom="10dp">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Crear Terrenos"
+            android:id="@+id/textView28"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textSize="35dp" />
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView3"
+            android:layout_marginLeft="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Crear Terrenos"
-                android:id="@+id/textView3"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:textSize="35dp" />
-
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/cmpCodigo"
-                android:layout_marginTop="20dp"
-                android:hint="Codigo"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
-
-            <EditText
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/cmpHacienda"
-                android:layout_marginTop="5dp"
-                android:hint="Hacienda"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
+                android:layout_height="match_parent" >
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/cmpSuerte"
-                android:layout_marginTop="5dp"
-                android:hint="Suerte"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editText2"
+                    android:hint="Codigo"
+                    android:textSize="25dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/cmpVariedad"
-                android:layout_marginTop="5dp"
-                android:hint="Variedad"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText3"
+                    android:layout_marginTop="5dp"
+                    android:hint="Hacienda"
+                    android:textSize="25dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/cmpZona"
-                android:layout_marginTop="5dp"
-                android:hint="Zona administrativa"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText4"
+                    android:layout_marginTop="5dp"
+                    android:hint="Suerte"
+                    android:textSize="25dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/cmpArea"
-                android:layout_marginTop="5dp"
-                android:hint="Area"
-                android:textSize="25dp"
-                android:layout_marginLeft="20dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText5"
+                    android:layout_marginTop="5dp"
+                    android:hint="Variedad"
+                    android:textSize="25dp" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="Agregar"
-                android:id="@+id/btnAgregarTerreno"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:textSize="30dp"
-                android:layout_marginTop="20dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText6"
+                    android:layout_marginTop="5dp"
+                    android:hint="Zona administrativa"
+                    android:textSize="25dp" />
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="10dp"
-                android:background="@drawable/border"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editText7"
+                    android:layout_marginTop="5dp"
+                    android:hint="Area"
+                    android:textSize="25dp" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="Cargar desde archivo"
-                android:id="@+id/btnCargarArchivo"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:textSize="30dp" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnMenu"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableRow">
 
-        </LinearLayout>
-    </ScrollView>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Agregar"
+            android:id="@+id/btnAgregarTerreno"
+            android:textSize="25dp"
+            android:layout_weight="1" />
 
-</FrameLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Cargar desde archivo"
+            android:id="@+id/btnCargarArchivo"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25dp"
+            android:layout_weight="1" />
+
+    </TableRow>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_home_black_36dp"
+        android:text="Regresar Menu"
+        android:id="@+id/btnMenu"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

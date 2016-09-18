@@ -1,0 +1,119 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.administrar.CrearTerreno">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Crear Terrenos"
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:textSize="35dp" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/cmpCodigo"
+                android:layout_marginTop="20dp"
+                android:hint="Codigo"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cmpHacienda"
+                android:layout_marginTop="5dp"
+                android:hint="Hacienda"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cmpSuerte"
+                android:layout_marginTop="5dp"
+                android:hint="Suerte"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cmpVariedad"
+                android:layout_marginTop="5dp"
+                android:hint="Variedad"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cmpZona"
+                android:layout_marginTop="5dp"
+                android:hint="Zona administrativa"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/cmpArea"
+                android:layout_marginTop="5dp"
+                android:hint="Area"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Agregar"
+                android:id="@+id/btnAgregarTerreno"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:textSize="30dp"
+                android:layout_marginTop="20dp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="10dp"
+                android:background="@drawable/border"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Cargar desde archivo"
+                android:id="@+id/btnCargarArchivo"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:textSize="30dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

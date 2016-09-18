@@ -2,6 +2,7 @@ package com.dinoxindustrial.app.agro_central.fragments.administrar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +25,7 @@ public class CrearContratista extends Fragment implements OnClickListener {
     private DatabaseCrud database;
 
     private EditText nombre;
-    private Button Btnagregar;
+    private Button Btnagregar, BtnMenu;
 
     public CrearContratista() {
     }
@@ -42,6 +43,9 @@ public class CrearContratista extends Fragment implements OnClickListener {
 
         Btnagregar= (Button)view.findViewById(R.id.btnAgregarContratista);
         Btnagregar.setOnClickListener(this);
+
+        BtnMenu = (Button)view.findViewById(R.id.btnMenu);
+        BtnMenu.setOnClickListener(this);
     }
 
 
@@ -68,6 +72,11 @@ public class CrearContratista extends Fragment implements OnClickListener {
                     Toast.makeText(view.getContext(),"Complete la informacion", Toast.LENGTH_SHORT).show();
                     nombre.setFocusable(true);
                 }
+                break;
+
+            case R.id.btnMenu:
+                Log.i("CrearContratista", "onClick regresar Menu");
+                getActivity().onBackPressed();
                 break;
         }
     }

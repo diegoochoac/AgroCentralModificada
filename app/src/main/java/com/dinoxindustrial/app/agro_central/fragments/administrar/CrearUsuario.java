@@ -40,7 +40,7 @@ public class CrearUsuario extends Fragment implements OnClickListener {
     private ArrayAdapter<String> adapterContratista;
 
     private EditText nombre;
-    private Button Btnagregar;
+    private Button Btnagregar, BtnMenu;
     private TextView contratista;
     Object select= null;
     private int request_code = 1;
@@ -64,8 +64,12 @@ public class CrearUsuario extends Fragment implements OnClickListener {
         nombre = (EditText)view.findViewById(R.id.cmpNombre);
         contratista = (TextView)view.findViewById(R.id.cmpAgreContratista);
         contratista.setOnClickListener(this);
+
         Btnagregar= (Button)view.findViewById(R.id.btnAgregarUsuario);
         Btnagregar.setOnClickListener(this);
+
+        BtnMenu = (Button)view.findViewById(R.id.btnMenu);
+        BtnMenu.setOnClickListener(this);
     }
 
     private void AlerDialogListContratista() {
@@ -172,6 +176,11 @@ public class CrearUsuario extends Fragment implements OnClickListener {
                     Toast.makeText(view.getContext(),"Complete la informacion", Toast.LENGTH_SHORT).show();
                 }
 
+                break;
+
+            case R.id.btnMenu:
+                Log.i("CrearUsuario", "onClick regresar Menu");
+                getActivity().onBackPressed();
                 break;
         }
     }

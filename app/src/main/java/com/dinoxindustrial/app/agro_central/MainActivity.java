@@ -1,9 +1,11 @@
 package com.dinoxindustrial.app.agro_central;
 
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -11,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -101,18 +105,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions | 8);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         setContentView(R.layout.agrocentral_layout);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.i("MainActivity","Pantalla");
+            hideVirtualButtons();
+        }
         inicializarMenu();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         inicializarGps();
+    }
 
-
+    @TargetApi(19)
+    private void hideVirtualButtons() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
 
@@ -182,7 +195,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragment = new AdministrarFragment();
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.fragmentMain, fragment);
-        trans.addToBackStack(null);
+        trans.addToBackStack("menu");
         trans.commit();
     }
 
@@ -723,6 +736,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         pagerAdapter.updateEstado(reporte.getEstado());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //backButtonHandler();
+    }
+    public void backButtonHandler() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        // Setting Dialog Title
+        alertDialog.setTitle("Salir Aplicacion");
+        // Setting Dialog Message
+        alertDialog.setMessage("Esta Seguro de Salir?");
+        // Setting Icon to Dialog
+        //alertDialog.setIcon(R.drawable.dialog_icon);
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("SI",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        dialog.cancel();
+                    }
+                });
+        // Showing Alert Message
+        alertDialog.show();
+    }
 
     //<editor-fold desc="Leer archivos excel">
     //Leer archivos excel para cargar contratista, terrenos, usuarios
@@ -773,10 +817,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Row row = sheet.getRow(r);
                     int cellsCount = row.getPhysicalNumberOfCells();
                     for (int c = 0; c<cellsCount; c++) {
-                        String value = getCellAsString(row, c, formulaEvaluator);
-                        String cellInfo = "r:"+r+"; c:"+c+"; v:"+value;
-                        Log.i("Cell Value: ", "Cell info:" + cellInfo.toString()+" value:" + value.toString());
-                        //printlnToUser(cellInfo);
+
                     }
                 }
 
@@ -786,40 +827,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         return;
     }
-
-    protected static String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
-        String value = "";
-        try {
-            Cell cell = row.getCell(c);
-            CellValue cellValue = formulaEvaluator.evaluate(cell);
-            switch (cellValue.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
-                    value = ""+cellValue.getBooleanValue();
-                    break;
-                case Cell.CELL_TYPE_NUMERIC:
-                    double numericValue = cellValue.getNumberValue();
-                    if(HSSFDateUtil.isCellDateFormatted(cell)) {
-                        double date = cellValue.getNumberValue();
-                        SimpleDateFormat formatter =
-                                new SimpleDateFormat("dd/MM/yy");
-                        value = formatter.format(HSSFDateUtil.getJavaDate(date));
-                    } else {
-                        value = ""+numericValue;
-                    }
-                    break;
-                case Cell.CELL_TYPE_STRING:
-                    value = ""+cellValue.getStringValue();
-                    break;
-                default:
-            }
-        } catch (NullPointerException e) {
-            /* proper error handling should be here */
-            //printlnToUser(e.toString());
-        }
-        return value;
-    }
-
-
 
     public static boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
