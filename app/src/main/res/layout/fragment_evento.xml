@@ -3,60 +3,69 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Evento"
-        android:id="@+id/textView13"
-        android:layout_gravity="center_horizontal"
-        android:textSize="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tableRow2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Evento"
+            android:id="@+id/textView26"
+            android:layout_gravity="center_horizontal"
+            android:textSize="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Presione para seleccionar un evento"
+            android:id="@+id/btnSeleEvento"
+            android:layout_marginTop="20dp"
+            android:textSize="25dp"
+            android:layout_below="@+id/textView26"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp" />
+    </LinearLayout>
+
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/btnMenu"
         android:layout_alignParentStart="true"
-        android:layout_margin="20dp">
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageHome"
-            android:src="@drawable/ic_home_black_48dp"
-            android:layout_weight="0.5" />
+        android:id="@+id/tableRow2">
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:text="INICIAR"
             android:id="@+id/btnInicarEvento"
             android:layout_weight="3"
-            android:textSize="30dp" />
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:text="DETENER"
             android:id="@+id/btnDetenerEvento"
             android:layout_weight="3"
-            android:textSize="30dp" />
-    </LinearLayout>
+            android:textSize="25dp" />
+    </TableRow>
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Presione para seleccionar un evento"
-        android:id="@+id/btnSeleEvento"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_home_black_36dp"
+        android:text="Regresar Menu"
+        android:id="@+id/btnMenu"
         android:textSize="30dp"
-        android:layout_below="@+id/textView13"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

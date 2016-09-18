@@ -125,5 +125,7 @@ public class AdministrarFragment extends Fragment implements OnClickListener {
     @Override
     public void onClick(View v) {
 
+
+
     }
 }

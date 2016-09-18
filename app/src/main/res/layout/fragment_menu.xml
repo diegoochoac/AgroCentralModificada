@@ -5,7 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,12 +19,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/LinearLabor">
 
-            <ImageView
+
+            <ImageButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/imageView3"
+                android:id="@+id/imageViewLabor"
                 android:src="@drawable/ic_exit_to_app_black_48dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:background="#ffffff" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,13 +59,14 @@
                 android:layout_weight="1"
                 android:id="@+id/LinearEvento">
 
-                <ImageView
+                <ImageButton
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@+id/imageView2"
+                    android:id="@+id/imageViewEvento"
                     android:src="@drawable/ic_date_range_black_48dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="0dp" />
+                    android:layout_marginTop="0dp"
+                    android:background="#ffffff" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,12 +85,13 @@
                 android:layout_weight="1"
                 android:id="@+id/LinearAdministrar">
 
-                <ImageView
+                <ImageButton
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@+id/imageView4"
+                    android:id="@+id/imageViewAdministrar"
                     android:src="@drawable/ic_next_week_black_48dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:background="#ffffff" />
 
                 <TextView
                     android:layout_width="wrap_content"

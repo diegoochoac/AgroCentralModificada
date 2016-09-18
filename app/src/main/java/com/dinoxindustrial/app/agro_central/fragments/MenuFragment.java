@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.dinoxindustrial.app.agro_central.R;
@@ -19,7 +22,7 @@ import com.dinoxindustrial.app.agro_central.R;
  */
 public class MenuFragment extends Fragment implements OnClickListener{
 
-    LinearLayout labor, evento, administrar;
+    private ImageButton labor, evento, administrar;
 
     //Variables que se van hacia el MAINACTIVITY
     public static final String BTN_LABOR = "labor";
@@ -42,11 +45,11 @@ public class MenuFragment extends Fragment implements OnClickListener{
 
 
     private void inicializarComponentes(final View view) {
-        labor = (LinearLayout)view.findViewById(R.id.LinearLabor);
+        labor = (ImageButton)view.findViewById(R.id.imageViewLabor);
         labor.setOnClickListener(this);
-        evento = (LinearLayout)view.findViewById(R.id.LinearEvento);
+        evento = (ImageButton)view.findViewById(R.id.imageViewEvento);
         evento.setOnClickListener(this);
-        administrar = (LinearLayout)view.findViewById(R.id.LinearAdministrar);
+        administrar = (ImageButton)view.findViewById(R.id.imageViewAdministrar);
         administrar.setOnClickListener(this);
     }
 
@@ -89,17 +92,17 @@ public class MenuFragment extends Fragment implements OnClickListener{
     public void onClick(View view) {
         Uri uri = Uri.parse("");
         switch (view.getId()) {
-            case R.id.LinearLabor:
+            case R.id.imageViewLabor:
                 Log.i("MenuFragment","onClick LinearLabor");
                 uri = Uri.parse(BTN_LABOR+":");
                 mListener.onFragmentInteraction(uri);
                 break;
-            case R.id.LinearEvento:
+            case R.id.imageViewEvento:
                 Log.i("MenuFragment","onClick LinearEvento");
                 uri = Uri.parse(BTN_EVENTO+":");
                 mListener.onFragmentInteraction(uri);
                 break;
-            case R.id.LinearAdministrar:
+            case R.id.imageViewAdministrar:
                 Log.i("MenuFragment","onClick LinearAdministrar");
                 uri = Uri.parse(BTN_ADMINISTRAR+":");
                 mListener.onFragmentInteraction(uri);

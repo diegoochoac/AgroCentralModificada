@@ -1,30 +1,78 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.administrar.CrearUsuario">
 
-    <ScrollView
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_home_black_36dp"
+        android:text="Regresar Menu"
+        android:id="@+id/btnMenu"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Agregar Usuario"
+        android:id="@+id/btnAgregarUsuario"
+        android:layout_gravity="center_horizontal"
+        android:textSize="25dp"
+        android:layout_above="@+id/btnMenu"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btnAgregarUsuario"
+        android:layout_marginBottom="10dp">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Crear Usuario"
+            android:id="@+id/textView47"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textSize="35dp" />
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Crear Usuario"
-                android:id="@+id/textView2"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
-                android:textSize="35dp" />
+                android:text="Contratista:"
+                android:id="@+id/textView25"
+                android:layout_margin="5dp"
+                android:textSize="25dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Presione para seleccionar contratista"
+                android:layout_margin="5dp"
+                android:id="@+id/cmpAgreContratista"
+                android:textSize="25dp" />
+        </TableRow>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView5"
+            android:layout_marginLeft="20dp">
 
             <EditText
                 android:layout_width="match_parent"
@@ -33,46 +81,16 @@
                 android:ems="10"
                 android:id="@+id/cmpNombre"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:hint="Nombre"
                 android:layout_margin="5dp"
                 android:textSize="25dp" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Contratista:"
-                    android:id="@+id/textView"
-                    android:layout_margin="5dp"
-                    android:textSize="25dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Presione para seleccionar contratista"
-                    android:layout_margin="5dp"
-                    android:id="@+id/cmpAgreContratista"
-                    android:textSize="25dp" />
-            </TableRow>
+        </ScrollView>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="Agregar Usuario"
-                android:id="@+id/btnAgregarUsuario"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="200dp"
-                android:textSize="30dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp" />
 
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

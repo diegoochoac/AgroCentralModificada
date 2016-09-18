@@ -19,7 +19,7 @@ import java.util.List;
 public class MenuAdministrar extends Fragment implements View.OnClickListener {
 
     //private DatabaseHelper databaseHelper = null;
-    private Button BtnContratista, BtnUsuarios, BtnTerreno;
+    private Button BtnContratista, BtnUsuarios, BtnTerreno, BtnMenu;
     private ListView listview;
 
    /* private Dao<Usuario, Integer> usuarioDao;
@@ -45,27 +45,10 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_admi, container, false);
-        setHasOptionsMenu(true);        //habilitar el action Bar para tener botones
         inicializarComponentes(rootview);
         thiscontext = container.getContext();
         return rootview;
     }
-
-   /* private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }*/
 
     private void inicializarComponentes(View view) {
 
@@ -76,6 +59,9 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
         BtnContratista.setOnClickListener(this);
         BtnUsuarios.setOnClickListener(this);
         BtnTerreno.setOnClickListener(this);
+
+        BtnMenu = (Button)view.findViewById(R.id.btnMenu);
+        BtnMenu.setOnClickListener(this);
 
     }
 
@@ -92,12 +78,9 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
-
         switch (view.getId()) {
-
             case R.id.btnContratista:
-                Log.i("MenuFragment3", "btnContratista");
+                Log.i("MenuAdministrar", "btnContratista");
                 /*try {
                     contratistaDao =  getHelper().getContratistaDao();
                     contratistaList = contratistaDao.queryForAll();
@@ -109,7 +92,7 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.btnUsuarios:
-                Log.i("MenuFragment3", "btnAgregarContratista");
+                Log.i("MenuAdministrar", "btnAgregarContratista");
                /* try {
                     usuarioDao =  getHelper().getUsuarioDao();
                     usuarioList = usuarioDao.queryForAll();
@@ -121,7 +104,7 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.btnTerreno:
-                Log.i("MenuFragment3", "btnTerreno");
+                Log.i("MenuAdministrar", "btnTerreno");
                 /*try {
                     terrenoDao =  getHelper().getTerrenoDao();
                     terrenoList = terrenoDao.queryForAll();
@@ -130,6 +113,11 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
                 }catch (SQLException e) {
                     e.printStackTrace();
                 }*/
+                break;
+
+            case R.id.btnMenu:
+                Log.i("MenuAdministrar", "btnMenu");
+                getActivity().onBackPressed();
                 break;
         }
     }

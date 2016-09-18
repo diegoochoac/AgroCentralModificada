@@ -38,14 +38,14 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editText2"
+                    android:id="@+id/cmpCodigo"
                     android:hint="Codigo"
                     android:textSize="25dp" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText3"
+                    android:id="@+id/cmpHacienda"
                     android:layout_marginTop="5dp"
                     android:hint="Hacienda"
                     android:textSize="25dp" />
@@ -53,7 +53,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText4"
+                    android:id="@+id/cmpSuerte"
                     android:layout_marginTop="5dp"
                     android:hint="Suerte"
                     android:textSize="25dp" />
@@ -61,7 +61,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText5"
+                    android:id="@+id/cmpVariedad"
                     android:layout_marginTop="5dp"
                     android:hint="Variedad"
                     android:textSize="25dp" />
@@ -69,7 +69,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText6"
+                    android:id="@+id/cmpZona"
                     android:layout_marginTop="5dp"
                     android:hint="Zona administrativa"
                     android:textSize="25dp" />
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editText7"
+                    android:id="@+id/cmpArea"
                     android:layout_marginTop="5dp"
                     android:hint="Area"
                     android:textSize="25dp" />

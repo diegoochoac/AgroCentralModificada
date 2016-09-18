@@ -39,7 +39,7 @@ import java.util.List;
 public class EventoFragment extends Fragment implements OnClickListener {
 
     private Button btnSelecTipoEven, btnIniciarEvento, btnDetenerEvento;
-    private ImageView imageHome;
+    private Button BtnMenu;
 
     //BASE DE DATOS
     private DatabaseCrud database;
@@ -74,8 +74,8 @@ public class EventoFragment extends Fragment implements OnClickListener {
         btnIniciarEvento.setOnClickListener(this);
         btnDetenerEvento = (Button)view.findViewById(R.id.btnDetenerEvento);
         btnDetenerEvento.setOnClickListener(this);
-        imageHome = (ImageView)view.findViewById(R.id.imageHome);
-        imageHome.setOnClickListener(this);
+        BtnMenu = (Button)view.findViewById(R.id.btnMenu);
+        BtnMenu.setOnClickListener(this);
     }
 
     void AlerDialogListEvento(){
@@ -202,8 +202,8 @@ public class EventoFragment extends Fragment implements OnClickListener {
                 }
                 break;
 
-            case R.id.imageHome:
-                Log.i("EventosFragment", "onClick imageHome");
+            case R.id.btnMenu:
+                Log.i("EventosFragment", "onClick Menu");
                 getActivity().onBackPressed();
                 break;
 
