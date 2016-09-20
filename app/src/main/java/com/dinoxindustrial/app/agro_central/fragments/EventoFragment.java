@@ -198,7 +198,7 @@ public class EventoFragment extends Fragment implements OnClickListener {
                     AlerDialogListEvento();
                 }else{
                     Log.i("EventosFragment", "onClick btnSeleEvento Ninguno");
-                    Toast.makeText(thiscontext,"No hay Eventos ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(thiscontext,"No se encuentran registros",Toast.LENGTH_SHORT).show();
                 }
                 break;
 

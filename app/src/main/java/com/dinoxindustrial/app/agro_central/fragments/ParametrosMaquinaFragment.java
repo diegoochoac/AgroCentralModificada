@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class ParametrosMaquinaFragment extends Fragment implements TextWatcher, View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public final static String SET_DISTANCIA_HERRAMIENTA = "Distacia herramienta";
     public final static String SET_DISTANCIA_EJE_SUELO = "Distacia suelo";
@@ -47,7 +47,7 @@ public class ParametrosMaquinaFragment extends Fragment implements TextWatcher, 
     public final static String ARG_MAQUINARIA = "Arg maquinaria";
     public final static String ARG_ANCHO_LABOR = "Arg ancho labor";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     private String distancia_herramienta;
@@ -72,7 +72,6 @@ public class ParametrosMaquinaFragment extends Fragment implements TextWatcher, 
      * @param param2 Parameter 2.
      * @return A new instance of fragment ParametrosMaquinaFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ParametrosMaquinaFragment newInstance(String mDistanciaHerramienta, String mDistanciaSuelo,String mMaquinaria,String mAnchoLabor) {
         ParametrosMaquinaFragment fragment = new ParametrosMaquinaFragment();
         Bundle args = new Bundle();
@@ -126,7 +125,6 @@ public class ParametrosMaquinaFragment extends Fragment implements TextWatcher, 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

@@ -155,11 +155,14 @@ public class CrearUsuario extends Fragment implements OnClickListener {
             case R.id.cmpAgreContratista:
                 contratistaList = database.obtenerContratistas();
                 if(contratistaList.size()>0 && contratistaList != null){
+                    contratistaListName.clear();
                     for(int i=0; i<contratistaList.size(); i++){
                         contratistaListName.add(contratistaList.get(i).getNombre());
                     }
                     adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
                     AlerDialogListContratista();
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                 }
                 break;
 

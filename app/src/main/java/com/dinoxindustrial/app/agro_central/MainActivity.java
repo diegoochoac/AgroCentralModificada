@@ -128,6 +128,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            // In KITKAT (4.4) and next releases, hide the virtual buttons
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                hideVirtualButtons();
+            }
+        }
+    }
 
     public void inicializarMenu(){
         Fragment fragment = null;
@@ -1037,7 +1047,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 fop.empezarRegistro(reporte.getHacienda(), reporte.getLote());
                 fop.writeHeaders(reporte.darEncabezado());
                 parameters.getParametrosRegister();
-                //TODO
+
                 this.sendSerial("T0:START,"+parameters.getParametrosRegisterJSON());
                 break;
 
@@ -1068,7 +1078,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
 
             case CrearTerreno.BTN_CREARTERRENOARCHIVO:
-                Log.i("CrearTerreno", "btnCargarArchivo"); //TODO no funciona aun la seleccion del archivo
+                Log.i("CrearTerreno", "btnCargarArchivo"); //TODO no funciona cargar archivos xlsx
                 Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
                 fileintent.setType("*/*");
                 try {

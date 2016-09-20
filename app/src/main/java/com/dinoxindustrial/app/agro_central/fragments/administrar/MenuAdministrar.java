@@ -7,13 +7,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import com.dinoxindustrial.app.agro_central.R;
+import com.dinoxindustrial.app.agro_central.basedatos.DatabaseCrud;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Usuario;
+import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAdministrar extends Fragment implements View.OnClickListener {
@@ -22,17 +29,20 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
     private Button BtnContratista, BtnUsuarios, BtnTerreno, BtnMenu;
     private ListView listview;
 
-   /* private Dao<Usuario, Integer> usuarioDao;
-    private Dao<Terreno, Integer> terrenoDao;
+    private DatabaseCrud database;
+    private Dao<Usuario, Integer> usuarioDao;
+    //private Dao<Terreno, Integer> terrenoDao;
     private Dao<Contratista, Integer> contratistaDao;
 
-    private List<Usuario> usuarioList;
-    private List<Terreno> terrenoList;
-    private List<Contratista> contratistaList;
+    //private List<Terreno> terrenoList;
 
-    private UsuarioAdapter adapterUsuario = null;
-    private TerrenoAdapter adapterTerreno = null;
-    private ContratistaAdapter adapterContratista = null;*/
+    private List<Usuario> usuarioList;
+    private List<String> usuarioListName = new ArrayList<>();
+    private ArrayAdapter<String> adapterUsuario;
+
+    private List<Contratista> contratistaList;
+    private List<String> contratistaListName = new ArrayList<>();
+    private ArrayAdapter<String> adapterContratista;
 
     Context thiscontext;
 
@@ -45,6 +55,7 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_admi, container, false);
+        database = new DatabaseCrud(container.getContext());
         inicializarComponentes(rootview);
         thiscontext = container.getContext();
         return rootview;
@@ -81,26 +92,32 @@ public class MenuAdministrar extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.btnContratista:
                 Log.i("MenuAdministrar", "btnContratista");
-                /*try {
-                    contratistaDao =  getHelper().getContratistaDao();
-                    contratistaList = contratistaDao.queryForAll();
-                    adapterContratista = new ContratistaAdapter(thiscontext, R.layout.row, contratistaList);
+                contratistaList = database.obtenerContratistas();
+                if(contratistaList.size()>0 && contratistaList != null) {
+                    contratistaListName.clear();
+                    for (int i = 0; i < contratistaList.size(); i++) {
+                        contratistaListName.add(contratistaList.get(i).getNombre());
+                    }
+                    adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
                     listview.setAdapter(adapterContratista);
-                }catch (SQLException e) {
-                    e.printStackTrace();
-                }*/
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.btnUsuarios:
                 Log.i("MenuAdministrar", "btnAgregarContratista");
-               /* try {
-                    usuarioDao =  getHelper().getUsuarioDao();
-                    usuarioList = usuarioDao.queryForAll();
-                    adapterUsuario = new UsuarioAdapter(thiscontext, R.layout.row, usuarioList);
+                usuarioList = database.obtenerUsuarios();
+                if(usuarioList.size()>0 && usuarioList != null) {
+                    usuarioListName.clear();
+                    for (int i = 0; i < usuarioList.size(); i++) {
+                        usuarioListName.add(usuarioList.get(i).getNombre());
+                    }
+                    adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
                     listview.setAdapter(adapterUsuario);
-                }catch (SQLException e) {
-                    e.printStackTrace();
-                }*/
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.btnTerreno:

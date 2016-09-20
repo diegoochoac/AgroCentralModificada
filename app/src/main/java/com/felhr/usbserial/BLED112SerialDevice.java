@@ -194,10 +194,7 @@ public class BLED112SerialDevice extends UsbSerialDevice
 
 	@Override
 	public void setFlowControl(int flowControl) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	{	}
 	
 	private int setControlCommand(int request, int value, byte[] data)
 	{

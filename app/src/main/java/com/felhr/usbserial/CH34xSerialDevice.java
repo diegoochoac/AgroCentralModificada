@@ -217,31 +217,19 @@ public class CH34xSerialDevice extends UsbSerialDevice
 
 	@Override
 	public void setDataBits(int dataBits) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	{	}
 
 	@Override
 	public void setStopBits(int stopBits) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	{	}
 
 	@Override
 	public void setParity(int parity) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	{	}
 
 	@Override
 	public void setFlowControl(int flowControl) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	{	}
 	
 	private int init()
 	{

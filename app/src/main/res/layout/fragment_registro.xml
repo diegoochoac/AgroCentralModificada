@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.dinoxindustrial.app.tab_example.RegistroFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
 
     <TableLayout
         android:layout_width="446dp"

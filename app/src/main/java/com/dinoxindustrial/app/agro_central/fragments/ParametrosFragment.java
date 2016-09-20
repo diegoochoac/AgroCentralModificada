@@ -253,10 +253,15 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                 String text = editText.getText().toString().toLowerCase().trim();
                 usuarioList = database.obtenerUsuarioAutocompletar(Usuario.NOMBRE,text);
                 Log.i("ParametrosFragment", "AlerDialogListUsuario numero:"+usuarioList.size());
+                usuarioListName.clear();
                 if(usuarioList.size()>0 && usuarioList != null){
                     for(int i=0; i<usuarioList.size(); i++){
                         usuarioListName.add(usuarioList.get(i).getNombre());
                     }
+                    adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
+                    listview.setAdapter(adapterUsuario);
+                }else{
+                    usuarioListName.add("No se encuentra busqueda");
                     adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
                     listview.setAdapter(adapterUsuario);
                 }
@@ -317,11 +322,16 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
             {
                 String text = editText.getText().toString().toLowerCase().trim();
                 contratistaList = database.obtenerContratistaAutocompletar(Contratista.NOMBRE,text);
-                Log.i("ParametrosFragment", "AlerDialogListUsuario numero:"+usuarioList.size());
+                Log.i("ParametrosFragment", "AlerDialogListContratista numero:"+contratistaList.size());
+                contratistaListName.clear();
                 if(contratistaList.size()>0 && contratistaList != null){
                     for(int i=0; i<contratistaList.size(); i++){
                         contratistaListName.add(contratistaList.get(i).getNombre());
                     }
+                    adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                    listview.setAdapter(adapterContratista);
+                }else{
+                    contratistaListName.add("No se encuentra busqueda");
                     adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
                     listview.setAdapter(adapterContratista);
                 }
@@ -384,21 +394,31 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                 switch (stateClick){
                      case 1:
                          terrenoListHacienda = database.obtenerHaciendasAutocompletar(Hacienda.NOMBRE,text);
+                         terrenoListHaciendaName.clear();
                          if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
                              for(int i=0; i<terrenoListHacienda.size(); i++){
                                  terrenoListHaciendaName.add(terrenoListHacienda.get(i).getNombre());
                              }
                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListHaciendaName);
                             listview.setAdapter(adapterTerreno);
+                         }else{
+                             terrenoListHaciendaName.add("No se encuentra busqueda");
+                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                             listview.setAdapter(adapterTerreno);
                          }
                          break;
                      case 2:
-                         terrenoListSuerte = database.obtenerSuertesAutocompletar(Suerte.NOMBRE,text);//TODO arreglar
+                         terrenoListSuerte = database.obtenerSuertesAutocompletar(Suerte.NOMBRE,text);
+                         terrenoListSuerteName.clear();
                          if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
                              for(int i=0; i<terrenoListSuerte.size(); i++){
                                  terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
                              }
                              adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
+                             listview.setAdapter(adapterTerreno);
+                         }else{
+                             terrenoListSuerteName.add("No se encuentra busqueda");
+                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
                              listview.setAdapter(adapterTerreno);
                          }
                          break;
@@ -506,9 +526,9 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View view) {
         Uri uri = Uri.parse("");
-        switch (v.getId()) {
+        switch (view.getId()) {
             case R.id.layoutRegistro:
                 System.out.println("Btn Registro");
                 uri = Uri.parse(BTN_REGISTRO+":");
@@ -523,25 +543,31 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
             case R.id.txtParametrosHacienda:
                 terrenoListHacienda = database.obtenerHaciendas();
                 if(terrenoListHacienda.size()>0 && terrenoListHacienda != null){
+                    terrenoListHaciendaName.clear();
                     Log.i("ParametrosFragment", "onClick cmpTextHacienda");
                     for(int i=0; i<terrenoListHacienda.size(); i++){
                         terrenoListHaciendaName.add(terrenoListHacienda.get(i).getNombre());
                     }
                     adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListHaciendaName);
                     AlerDialogListTerreno();
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                 }
                 stateClick = 1;
                 break;
 
             case R.id.txtParametrosLote:
-                terrenoListSuerte = database.obtenerSuertes();//TODO: Arreglar
+                terrenoListSuerte = database.obtenerSuertes();
                 if(terrenoListSuerte.size()>0 && terrenoListSuerte != null){
+                    terrenoListSuerteName.clear();
                     Log.i("ParametrosFragment", "onClick cmpTextSuerte");
                     for(int i=0; i<terrenoListSuerte.size(); i++){
                         terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
                     }
                     adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
                     AlerDialogListTerreno();
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                 }
                 stateClick = 2;
                 break;
@@ -549,27 +575,32 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
             case R.id.txtParametrosContratista:
                 contratistaList = database.obtenerContratistas();
                 if(contratistaList.size()>0 && contratistaList != null){
+                    contratistaListName.clear();
                     Log.i("ParametrosFragment", "onClick cmpTextOperador");
                     for(int i=0; i<contratistaList.size(); i++){
                         contratistaListName.add(contratistaList.get(i).getNombre());
                     }
                     adapterContratista = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
                     AlerDialogListContratista();
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.txtParametrosOperador:
                 usuarioList = database.obtenerUsuarios();
                 if(usuarioList.size()>0 && usuarioList != null){
+                    usuarioListName.clear();
                     Log.i("ParametrosFragment", "onClick cmpTextOperador");
                     for(int i=0; i<usuarioList.size(); i++){
                         usuarioListName.add(usuarioList.get(i).getNombre());
                     }
                     adapterUsuario = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,usuarioListName);
                     AlerDialogListUsuario();
+                }else{
+                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                 }
                 break;
-
 
         }
     }
