@@ -24,12 +24,26 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dinoxindustrial.app.agro_central.basedatos.DatabaseCrud;
+import com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Hacienda;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Suerte;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Variedad;
+import com.dinoxindustrial.app.agro_central.basedatos.terreno.Zona;
 import com.dinoxindustrial.app.agro_central.fragments.AgroCentralFragmentPagerAdapter;
 import com.dinoxindustrial.app.agro_central.fragments.EventoFragment;
 import com.dinoxindustrial.app.agro_central.fragments.GPSFragment;
@@ -70,6 +84,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener,OnFragmentInteractionListener
 {
+
+    private static DatabaseCrud database;
+
     public static final String PREFS_NAME = "AGRO_REPORTES_PREFS";
     /***
      * Service for usb communication
@@ -115,6 +132,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         inicializarMenu();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inicializarGps();
+        database = new DatabaseCrud(this);
     }
 
     @TargetApi(19)
@@ -780,7 +798,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     //<editor-fold desc="Leer archivos excel">
     //Leer archivos excel para cargar contratista, terrenos, usuarios
-    private static void readExcelFile(Context context, String filename) {
+    private void readExcelFile(Context context, String filename) {
 
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
         {
@@ -789,34 +807,66 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         try{
-            Log.i("Bien","readExcelFile");
-            // Creating Input Stream
-            //File file = new File(context.getExternalFilesDir(null), filename);
             File file = new File(Environment.getExternalStorageDirectory()+"/"+filename);
             FileInputStream myInput = new FileInputStream(file);
             String extension = filename.substring(filename.lastIndexOf(".")+1).trim();
             Log.i("Bien","extension:"+ extension);
 
-            if(extension.equals("xls") || extension.equals("ods")){
-                Log.i("Bien","readExcelFile xls");
-                // Create a POIFSFileSystem object
+            if(extension.equals("xls") || extension.equals("ods")) {
                 POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
-                // Create a workbook using the File System
                 HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
-                // Get the first sheet from workbook
                 HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-                /** We now need something to iterate through the cells.**/
                 Iterator rowIter = mySheet.rowIterator();
+                int fila = 0;
 
-                while(rowIter.hasNext()) {
+                while (rowIter.hasNext()) {
                     HSSFRow myRow = (HSSFRow) rowIter.next();
                     Iterator cellIter = myRow.cellIterator();
+                    String Codigo = "";
+                    String Hacienda = "";
+                    String Suerte = "";
+                    String Variedad = "";
+                    String Zona = "";
+                    String Area = "";
+                    int columna = 0;
                     while (cellIter.hasNext()) {
                         HSSFCell myCell = (HSSFCell) cellIter.next();
-                        Log.i("Cell Value: ", "" + myCell.toString());
-                        Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
+                        if (columna == 0 && fila>0) {
+                            Codigo = myCell.toString();
+                            Log.i("Codigo: ", "" + myCell.toString());
+                        }
+                        if (columna == 1 && fila>0) {
+                            Hacienda = myCell.toString();
+                            Log.i("Hacienda: ", "" + myCell.toString());
+                            agregarHacienda(Codigo,Hacienda);
+                        }
+                        if (columna == 2 && fila>0) {
+                            Suerte = myCell.toString();
+                            Log.i("Suerte: ", "" + myCell.toString());
+                        }
+                        if (columna == 3 && fila>0) {
+                            Variedad = myCell.toString();
+                            agregarVariedad(Variedad);
+                            Log.i("Variedad: ", "" + myCell.toString());
+                        }
+                        if (columna == 4 && fila>0) {
+                            Zona = myCell.toString();
+                            agregarZona(Zona);
+                            Log.i("Zona: ", "" + myCell.toString());
+                        }
+                        if (columna == 5 && fila>0) {
+                            Area = myCell.toString();
+                            Log.i("Area: ", "" + myCell.toString());
+                        }
+                        columna= columna+1;
                     }
+                    if( fila>0) {
+                        agregarSuerte(Suerte,Area,Hacienda,Variedad,Zona);
+                    }
+                    fila= fila+1;
                 }
+                Toast.makeText(context, "Finalizo carga desde archivo ", Toast.LENGTH_SHORT).show();
+
             }else if(extension.equals("xlsx")){
                 Log.i("Bien","readExcelFile xlsx");
                 XSSFWorkbook workbook = new XSSFWorkbook(myInput);      //TODO: el problema puede estar aca
@@ -838,7 +888,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return;
     }
 
-    public static boolean isExternalStorageAvailable() {
+    public  boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
             return true;
@@ -846,13 +896,42 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return false;
     }
 
-    public static boolean isExternalStorageReadOnly() {
+    public  boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
             return true;
         }
         return false;
     }
+
+    public  void agregarHacienda(String codigo, String hacienda){
+        Hacienda nuevo = new Hacienda(codigo,hacienda);
+        database.crearHacienda(nuevo);
+    }
+
+    public  Suerte agregarSuerte(String nombre, String area,String hacienda, String variedad, String zona){
+
+        Hacienda haciendaQuery = database.obtenerHacienda(hacienda);
+        Variedad variedadQuery = database.obtenerVariedad(variedad);
+        Zona zonaQuery = database.obtenerZona(zona);
+
+        Suerte nuevo = new Suerte(nombre,area,haciendaQuery,variedadQuery,zonaQuery);
+        database.crearSuerte(nuevo);
+        return nuevo;
+    }
+
+    public  Zona agregarZona(String valor){
+        Zona nuevo = new Zona(valor);
+        database.crearZona(nuevo);
+        return nuevo;
+    }
+
+    public  Variedad agregarVariedad(String valor){
+        Variedad nuevo = new Variedad(valor);
+        database.crearVariedad(nuevo);
+        return nuevo;
+    }
+
     //</editor-fold>
 
     @Override
@@ -866,11 +945,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     String FilePath = data.getData().getPath();
                     String FileWind = FilePath.substring(FilePath.lastIndexOf(":")+1);
                     String NameFile = FilePath.substring(FilePath.lastIndexOf("/")+1);
-                    //FilePath is your file as a string
                     Log.i("CrearTerreno", "onActivityResult FilePath: "+FilePath+ " NameFile: "+ FileWind);
                     readExcelFile(this.getApplicationContext(),FileWind);
-
-
                 }
         }
     }

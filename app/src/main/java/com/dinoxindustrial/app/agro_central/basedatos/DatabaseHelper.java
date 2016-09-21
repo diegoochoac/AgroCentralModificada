@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.dinoxindustrial.app.agro_central.R;
 import com.dinoxindustrial.app.agro_central.basedatos.contratista.Contratista;
 import com.dinoxindustrial.app.agro_central.basedatos.contratista.Usuario;
 import com.dinoxindustrial.app.agro_central.basedatos.evento.Evento;

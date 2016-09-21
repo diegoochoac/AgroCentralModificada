@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
@@ -78,6 +79,7 @@ public class DatabaseCrud {
     //<editor-fold desc="CRUD Usuario">
     public int crearUsuario(Usuario nuevo){
         try {
+            Log.i("DatabaseCrud","crearUsuario Bien: "+nuevo.getNombre());
             return usuarioDao.create(nuevo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -282,7 +284,12 @@ public class DatabaseCrud {
     //<editor-fold desc="CRUD Terreno Hacienda">
     public int crearHacienda(Hacienda nuevo){
         try {
-            return haciendaDao.create(nuevo);
+            List<Hacienda> existentes = haciendaDao.queryForEq(Hacienda.NOMBRE,nuevo.getNombre());
+            Log.i("hacienda existentes", "numero:"+existentes.size());
+            if (existentes.size() == 0) {
+                Log.i("DatabaseCrud","crearHacienda Bien: "+nuevo.getNombre());
+                return haciendaDao.create(nuevo);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -312,9 +319,16 @@ public class DatabaseCrud {
     public Hacienda obtenerHacienda(String nombre)
     {
         try {
-            QueryBuilder<Hacienda, Integer> db= haciendaDao.queryBuilder();
-            db.where().eq(Contratista.NOMBRE, nombre);
-            return db.query().get(0);
+            QueryBuilder<Hacienda, Integer> db = haciendaDao.queryBuilder();
+            db.where().eq(Hacienda.NOMBRE, nombre);
+            PreparedQuery<Hacienda> preparedQuery = db.prepare();
+            List<Hacienda> accountList = haciendaDao.query(preparedQuery);
+            Log.i("DatabaseCrud", "obtenerHacienda numero: " + accountList.size());
+            if (accountList.size() > 0) {
+                return accountList.get(0);
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -384,6 +398,7 @@ public class DatabaseCrud {
     //<editor-fold desc="CRUD Terreno Hacienda">
     public int crearSuerte(Suerte nuevo){
         try {
+            Log.i("DatabaseCrud","crearSuerte Bien: "+nuevo.getNombre());
             return suerteDao.create(nuevo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -417,6 +432,29 @@ public class DatabaseCrud {
             QueryBuilder<Suerte, Integer> db= suerteDao.queryBuilder();
             db.where().eq(Suerte.NOMBRE, nombre);
             return db.query().get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Suerte>  obtenerSuertesporId(String id,String nombre)
+    {
+        try {
+            Hacienda haciendasele = obtenerHacienda(nombre);
+            Log.i("DatabaseCrud", "obtenerSuertesporId haceinda: " + haciendasele.getNombre());
+
+            QueryBuilder<Suerte, Integer> db= suerteDao.queryBuilder();
+            db.where().eq(id,haciendasele);
+            PreparedQuery<Suerte> preparedQuery = db.prepare();
+            List<Suerte> accountList = suerteDao.query(preparedQuery);
+            Log.i("DatabaseCrud", "obtenerSuertesporId numero: " + accountList.size());
+            if(accountList.size()>0){
+                return accountList;
+            }else{
+                return null;
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -483,27 +521,10 @@ public class DatabaseCrud {
 
     //</editor-fold>
 
-    public int crearVariedad(Variedad nuevo){
-        try {
-            return variedadDao.create(nuevo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public int crearZona(Zona nuevo){
-        try {
-            return zonaDao.create(nuevo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
     //<editor-fold desc="CRUD Evento">
     public int crearEvento(Evento nuevo){
         try {
+            Log.i("DatabaseCrud","crearEvento Bien: "+nuevo.getTipoEvento()+"-"+nuevo.getId());
             return eventoDao.create(nuevo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -594,6 +615,7 @@ public class DatabaseCrud {
     //<editor-fold desc="CRUD TipoEvento">
     public int crearTipoEvento(TipoEvento nuevo){
         try {
+            Log.i("DatabaseCrud","crearTipoEvento Bien: "+nuevo.getNombre());
             return tipoEventoDao.create(nuevo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -680,5 +702,57 @@ public class DatabaseCrud {
     }
 
     //</editor-fold>
+
+    public int crearVariedad(Variedad nuevo){
+        try {
+            List<Variedad> existentes = variedadDao.queryForEq(Variedad.VALOR,nuevo.getValor());
+            Log.i("variedad existentes", "numero:"+existentes.size());
+            if (existentes.size() == 0) {
+                Log.i("DatabaseCrud","crearVariedad Bien: "+nuevo.getValor());
+                return variedadDao.create(nuevo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public Variedad obtenerVariedad(String valor)
+    {
+        try {
+            QueryBuilder<Variedad, Integer> db= variedadDao.queryBuilder();
+            db.where().eq(Variedad.VALOR, valor);
+            return db.query().get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int crearZona(Zona nuevo){
+        try {
+            List<Zona> existentes = zonaDao.queryForEq(Zona.VALOR,nuevo.getValor());
+            Log.i("zona existentes", "numero:"+existentes.size());
+            if (existentes.size() == 0) {
+                Log.i("DatabaseCrud","crearZona Bien: "+nuevo.getValor());
+                return zonaDao.create(nuevo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public Zona obtenerZona(String valor)
+    {
+        try {
+            QueryBuilder<Zona, Integer> db= zonaDao.queryBuilder();
+            db.where().eq(Zona.VALOR, valor);
+            return db.query().get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

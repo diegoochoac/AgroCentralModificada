@@ -403,7 +403,7 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                             listview.setAdapter(adapterTerreno);
                          }else{
                              terrenoListHaciendaName.add("No se encuentra busqueda");
-                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListHaciendaName);
                              listview.setAdapter(adapterTerreno);
                          }
                          break;
@@ -418,7 +418,7 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                              listview.setAdapter(adapterTerreno);
                          }else{
                              terrenoListSuerteName.add("No se encuentra busqueda");
-                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,contratistaListName);
+                             adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
                              listview.setAdapter(adapterTerreno);
                          }
                          break;
@@ -557,19 +557,24 @@ public class ParametrosFragment extends Fragment implements TextWatcher,View.OnC
                 break;
 
             case R.id.txtParametrosLote:
-                terrenoListSuerte = database.obtenerSuertes();
-                if(terrenoListSuerte.size()>0 && terrenoListSuerte != null){
-                    terrenoListSuerteName.clear();
-                    Log.i("ParametrosFragment", "onClick cmpTextSuerte");
-                    for(int i=0; i<terrenoListSuerte.size(); i++){
-                        terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
+                String haciendaSel = txtHacienda.getText().toString();
+                if( !haciendaSel.equals("Hacienda Prueba")){
+                    terrenoListSuerte = database.obtenerSuertesporId(Suerte.KEY_HACIENDA,haciendaSel);
+                    if(terrenoListSuerte.size()>0 && terrenoListSuerte != null){
+                        terrenoListSuerteName.clear();
+                        Log.i("ParametrosFragment", "onClick cmpTextSuerte");
+                        for(int i=0; i<terrenoListSuerte.size(); i++){
+                            terrenoListSuerteName.add(terrenoListSuerte.get(i).getNombre());
+                        }
+                        adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
+                        AlerDialogListTerreno();
+                    }else{
+                        Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
                     }
-                    adapterTerreno = new ArrayAdapter<String>(thiscontext,android.R.layout.simple_list_item_1,terrenoListSuerteName);
-                    AlerDialogListTerreno();
+                    stateClick = 2;
                 }else{
-                    Toast.makeText(view.getContext(),"No se encuentran registros", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(),"Seleccione una Hacienda", Toast.LENGTH_SHORT).show();
                 }
-                stateClick = 2;
                 break;
 
             case R.id.txtParametrosContratista:

@@ -72,15 +72,14 @@ public class CrearTerreno extends Fragment implements OnClickListener {
 
 
 
-    public void agregarHacienda(String codigo, String hacienda, Suerte suerte){
-
-        Hacienda nuevo = new Hacienda(codigo,hacienda,suerte);
+    public void agregarHacienda(String codigo, String hacienda){
+        Hacienda nuevo = new Hacienda(codigo,hacienda);
         database.crearHacienda(nuevo);
     }
 
-    public Suerte agregarSuerte(String nombre, String area, Variedad variedad, Zona zona){
+    public Suerte agregarSuerte(String nombre, String area,Hacienda hacienda, Variedad variedad, Zona zona){
 
-        Suerte nuevo = new Suerte(nombre,area,variedad,zona);
+        Suerte nuevo = new Suerte(nombre,area,hacienda,variedad,zona);
         database.crearSuerte(nuevo);
         return nuevo;
     }
@@ -98,7 +97,12 @@ public class CrearTerreno extends Fragment implements OnClickListener {
     }
 
     public void CrearTerreno(String codigo,String hacienda, String suerte,String variedad, String zona, String area){
-        agregarHacienda(codigo,hacienda,agregarSuerte(suerte, area,agregarVariedad(variedad),agregarZona(zona)));
+
+        agregarZona(zona);
+        agregarVariedad(variedad);
+        agregarHacienda(codigo,hacienda);
+        //agregarSuerte(suerte,area,,,);
+        //TODO: arreglar
     }
 
     public void limpiarCampos(){

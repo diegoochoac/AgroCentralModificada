@@ -21,18 +21,19 @@ public class Hacienda {
     @DatabaseField(columnName = NOMBRE)
     private String nombre;
 
-    // Foreign key defined to hold associations
+    /*// Foreign key defined to hold associations
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
-    public Suerte suerte;
+    public Suerte suerte;*/
 
 
     public Hacienda() {
     }
 
-    public Hacienda(String nombre, String codigo, Suerte suerte) {
-        this.nombre = nombre;
+    //public Hacienda(String nombre, String codigo, Suerte suerte) {
+    public Hacienda(String codigo,String nombre) {
         this.codigo = codigo;
-        this.suerte = suerte;
+        this.nombre = nombre;
+        //this.suerte = suerte;
     }
 
     //<editor-fold desc="Get- Set">
@@ -60,13 +61,13 @@ public class Hacienda {
         this.codigo = codigo;
     }
 
-    public Suerte getSuerte() {
+    /*public Suerte getSuerte() {
         return suerte;
     }
 
     public void setSuerte(Suerte suerte) {
         this.suerte = suerte;
     }
-
+*/
     //</editor-fold>
 }
